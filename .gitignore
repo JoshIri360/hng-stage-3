@@ -33,3 +33,15 @@ yarn-error.*
 
 # typescript
 *.tsbuildinfo
+
+android/
+ios/
+
+*.zip
+*.tar.gz
+*.tar.xz
+*.tar.bz2
+*.tar.7z
+*.tar.Z
+*.tar.lzma
+*.apk
