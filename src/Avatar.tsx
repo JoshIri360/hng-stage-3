@@ -16,6 +16,7 @@ interface AvatarState {
 interface AvatarProps {
   modelPath: string;
   state: AvatarState;
+  avatarType: "male" | "female";
 }
 
 const MALE_ANIMATIONS = {
@@ -75,12 +76,13 @@ const getRotationForDirection = (
   }
 };
 
-function Avatar({ modelPath, state }: AvatarProps) {
+function Avatar({ modelPath, state, avatarType }: AvatarProps) {
   const group = useRef<Group>(null);
   const { scene } = useGLTF(modelPath) as any;
 
-  const isMale = modelPath === require("../assets/3d/avatar-male.glb");
+  const isMale = avatarType === "male";
   const animationFile = getAnimationFile(isMale, state.animation);
+  // Always use the animation files we have, regardless of custom model
   const { animations } = useGLTF(animationFile) as any;
 
   const { actions, names } = useAnimations(animations, group);

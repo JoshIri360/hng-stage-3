@@ -1,4 +1,4 @@
-import { OrbitControls, useTexture } from "@react-three/drei/native";
+import { OrbitControls, useTexture, useGLTF } from "@react-three/drei/native";
 import { Canvas } from "@react-three/fiber/native";
 import { Suspense, useRef, useState } from "react";
 import {
@@ -75,12 +75,14 @@ function Scene({
           maleState.modelPath || require("./assets/3d/avatar-male.glb")
         }
         state={maleState}
+        avatarType="male"
       />
       <Avatar
         modelPath={
           femaleState.modelPath || require("./assets/3d/avatar-female.glb")
         }
         state={femaleState}
+        avatarType="female"
       />
 
       <ambientLight intensity={1.5} />
@@ -117,6 +119,9 @@ export default function App() {
     facing: "left",
     animation: "idle",
   });
+
+  // A key to force reloading (remounting) the entire Canvas and its children.
+  const [sceneReloadKey, setSceneReloadKey] = useState(0);
 
   const [isLoading, setIsLoading] = useState(true);
   const maleMovementEnabled = useRef(true);
@@ -204,6 +209,9 @@ export default function App() {
     }
   };
 
+  // When a new model file is loaded, update the relevant state,
+  // clear the GLTF cache (so that useGLTF re-fetches the model),
+  // and increment our sceneReloadKey to force a complete remount.
   const handleLoadModel = (type: AvatarType, url: string) => {
     if (type === "male") {
       setMaleState({
@@ -216,11 +224,13 @@ export default function App() {
         modelPath: url,
       });
     }
+    setSceneReloadKey((prevKey) => prevKey + 1);
   };
 
   return (
     <View style={styles.container}>
       <Canvas
+        key={sceneReloadKey} // updating the key forces the whole scene to remount.
         camera={{ position: [0, 1.5, 3], fov: 60 }}
         onCreated={() => setIsLoading(false)}
       >
