@@ -73,7 +73,6 @@ This project is my journey into mobile 3D development during the HNG Internship.
 ## 🚧 Known Issues  
 - **iOS Builds:** Fails due to `@react-three/drei/native` compatibility  
 - **Performance:** Framerate drops on low-end Android devices  
-- **Texture Loading:** Occasional crashes with large .jpg files  
 
 ---
 
